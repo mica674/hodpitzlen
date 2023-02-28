@@ -2,8 +2,9 @@
 // Appel des constantes
 require_once(__DIR__ . '/../config/constants.php');
 
-// Appel du model
+// Appel des models
 require_once(__DIR__ . '/../models/Patient.php');
+require_once(__DIR__ . '/../models/Appointment.php');
 
 
 // *VERIFICATIONS DES DONNEES DU FORMULAIRE 
@@ -77,20 +78,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { //Si les données sont bien envoyée
     }
 
     // ?Compare with previous values and new values
-    if ((   $lastname != $_GET['lastname'] 
-        ||  $firstname != $_GET['firstname']
-        ||  $email != $_GET['email']
-        ||  $birthdate != $_GET['birthdate']
+    $patient = Patient::getPatient(intval(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)));
+    if ((   $lastname   !=      $patient->lastname
+        ||  $firstname  !=      $patient->firstname
+        ||  $email      !=      $patient->email
+        ||  $birthdate  !=      $patient->birthdate 
         ) 
         && !Patient::isNotExist($lastname, $firstname, $email, $birthdate)
         ) {
             $error['exist'] = 'Un patient a déjà ces informations dans la base de données ! ';
     }
+
     // ?No error -> redirect to PatientsList page
     if (empty($error)) { // Si aucune erreur après tous les nettoyages et les validations
 
         $patient = new Patient();
-        $patient->setId($_GET['id']);
+        $patient->setId(intval(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)));
         $patient->setLastname($lastname);
         $patient->setFirstname($firstname);
         $patient->setEmail($email);
@@ -106,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { //Si les données sont bien envoyée
         if (!$result) { //Si une erreur est survenu pendant l'ajout à la base de données
             echo 'message d\'erreur ! (A MODIFIER !)';
         } else { //Si pas d'erreur retour à la page d'Accueil
-            header('location: /PatientsList?patientEdited=1');
+            header('location: /PatientsList?patientUpdated=1');
             die;
         }
     } else {
@@ -120,9 +123,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { //Si les données sont bien envoyée
 // Appel du model
 require_once(__DIR__ . '/../models/Patient.php');
 // Récupère l'ID du patient passé en get
-$patientId = $_GET['id'];
-$patient = new Patient;
-$patient->getPatient($patientId);
+$idPatient = intval(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
+try {   
+    if (!Patient::isIdExist($idPatient)) {
+        throw new Exception("Ce patient n'existe pas", 1);
+    }
+    
+    $patient = Patient::getPatient($idPatient);
+    $appointments = Appointment::getAll($idPatient);
+} catch (\Throwable $th) {
+
+    include(__DIR__ . '/../views/templates/header.php');
+    include(__DIR__ . '/../views/templates/errors.php');
+    include(__DIR__ . '/../views/templates/footer.php');
+    exit;
+
+}
 
 // Fichiers JS à appeler dans le footer
 $jsToCall = 'patientProfil';

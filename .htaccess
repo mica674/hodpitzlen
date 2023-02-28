@@ -1,10 +1,12 @@
-RewriteEngine on
+RewriteEngine                   on
 
-RewriteRule Accueil /controllers/homeCtrl.php
-RewriteRule AddPatient /controllers/addPatientCtrl.php
-RewriteRule EditPatient /controllers/editPatientCtrl.php
-RewriteRule PatientsList /controllers/patientsListCtrl.php
-RewriteRule AddAppointment /controllers/addAppointmentCtrl.php
+RewriteRule Accueil             /controllers/homeCtrl.php
+RewriteRule AddPatient          /controllers/addPatientCtrl.php
+RewriteRule EditPatient         /controllers/editPatientCtrl.php
+RewriteRule PatientsList        /controllers/patientsListCtrl.php
+RewriteRule AddAppointment      /controllers/addAppointmentCtrl.php
+RewriteRule EditAppointment     /controllers/editAppointmentCtrl.php
+RewriteRule AppointmentsList    /controllers/appointmentsListCtrl.php
 
 
-ErrorDocument 404 /404page.html
+ErrorDocument 404               /404page.php

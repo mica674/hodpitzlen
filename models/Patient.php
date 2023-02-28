@@ -163,7 +163,8 @@ class Patient
             $db = dbConnect();
         }
         $sql = 'INSERT INTO `patients` (`lastname`, `firstname`, `mail`, `phone`, `birthdate`) 
-                VALUES (:lastname, :firstname, :email, :phone, :birthdate);';
+                VALUES (:lastname, :firstname, :email, :phone, :birthdate)
+                ;';
 
         $sth = $db->prepare($sql);
         $sth->bindValue(':lastname',    $this->lastname,    PDO::PARAM_STR);
@@ -172,7 +173,14 @@ class Patient
         $sth->bindValue(':phone',       $this->phone,       PDO::PARAM_STR);
         $sth->bindValue(':birthdate',   $this->birthdate,   PDO::PARAM_STR);
 
-        return $sth->execute();
+        
+        $sth->execute();
+
+        // Compter le nombre d'enregistrements affecter par la requête
+        $nbResults = $sth->rowCount();
+
+        // Retourner l'état de l'opération (true si tout s'est bien passé, sinon false)
+        return !empty($nbResults);
     }
 
     public function update(): bool
@@ -215,23 +223,37 @@ class Patient
         $sth = $db->prepare($sql);
         $sth->execute();
         $result = $sth->fetchAll();
-        return empty($result) ? true : false;
+        return empty($result);
     }
 
-    public function getPatient($id):void
+    public static function getPatient($id):object
     {
         if (!isset($db)) {
             $db = dbConnect();
         }
-        $sql = 'SELECT `id`, `lastname`, `firstname`, `mail` AS `email`, `phone`, `birthdate` FROM `patients` WHERE `id` = ' . $id . ';';
+        $sql = 'SELECT `id`, `lastname`, `firstname`, `mail` AS `email`, `phone`, `birthdate` FROM `patients` WHERE `id` = :id;';
         $sth = $db->prepare($sql);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth->execute();
         $result = $sth->fetch();
-        $this->setLastname($result->lastname);
-        $this->setFirstname($result->firstname);
-        $this->setEmail($result->email);
-        $this->setPhone($result->phone);
-        $this->setBirthdate($result->birthdate);
+        return $result;
+    }
+
+
+    public static function isIdExist(int $id):bool{
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = "SELECT `id`
+                FROM `patients`
+                WHERE   `id`  =   :id
+                ;";
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth->execute();
+        $result = $sth->fetch();
+        return !empty($result);
+
     }
 
     // Lister tous les patients de la base de données
@@ -244,7 +266,9 @@ class Patient
         if (!isset($db)) {
             $db = dbConnect();
         }
-        $sql = 'SELECT `id`, `lastname`, `firstname`, `mail` AS `email`, `phone`, `birthdate` FROM patients;';
+        $sql = 'SELECT `id`, `lastname`, `firstname`, `mail` AS `email`, `phone`, `birthdate` 
+                FROM patients
+                ORDER BY lastname;';
         $sth = $db->query($sql);
         $result = $sth->fetchAll();
         return $result;

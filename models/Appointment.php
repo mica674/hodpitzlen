@@ -78,4 +78,124 @@ class Appointment extends Patient
     {
         $this->idPatients = $idPatients;
     }
+
+
+    // ADD
+        /**
+     * Cette fonction permet d'ajouter un rendez-vous à la base données.
+     * Elle attend 5 paramètres en entrées (format string) et return un booleen true si tout s'est bien passé
+     * 
+     * 
+     * @return bool
+     */
+    public function add(): bool
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = 'INSERT INTO `appointments` (`dateHour`, `idPatients`) 
+                VALUES (:dateHour, :idPatients)
+                ;';
+
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':dateHour',    $this->dateHour,    PDO::PARAM_STR);
+        $sth->bindValue(':idPatients',  $this->idPatients,  PDO::PARAM_STR);
+        
+        $sth->execute();
+
+        // Compter le nombre d'enregistrements affecter par la requête
+        $nbResults = $sth->rowCount();
+        // Retourner l'état de l'opération (true si tout s'est bien passé, sinon false)
+        return !empty($nbResults);
+    }
+
+    // UPDATE
+        /**
+     * Cette fonction permet de modifier un rendez-vous dans la base données.
+     * Elle attend aucun paramètre d'entrée et return un booleen true si tout s'est bien passé
+     * 
+     * 
+     * @return bool
+     */
+    public function update(): bool
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = 'UPDATE `appointments`
+                SET `dateHour` = :dateHour,
+                    `idPatients` = :idPatients
+                WHERE `id` = :id;
+                ;';
+
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':dateHour',    $this->dateHour,    PDO::PARAM_STR);
+        $sth->bindValue(':idPatients',  $this->idPatients,  PDO::PARAM_STR);
+        $sth->bindValue(':id',          $this->id,          PDO::PARAM_STR);
+        $sth->execute();
+
+        // Compter le nombre d'enregistrements affecter par la requête
+        $nbResults = $sth->rowCount();
+        // Retourner l'état de l'opération (true si tout s'est bien passé, sinon false)
+        return !empty($nbResults);
+    }
+    
+    // IS NOT EXIST
+    public static function isExist($dateHour): bool
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = "SELECT `dateHour`, `idPatients`
+                FROM `appointments`
+                WHERE   `dateHour`  =   '$dateHour'
+                    ;";
+        $sth = $db->prepare($sql);
+        $sth->execute();
+        $result = $sth->fetchAll();
+        return !empty($result);
+    }
+
+        // Lister tous les rendez-vous des patients de la base de données
+    /**
+     * Cette fonction permet de retourner la liste de tous les rendez-vous des patients avec leurs informations.
+     * @return array
+     */
+    public static function getAll($id = false): array
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        if (!$id) {
+            $sql = 'SELECT `rdv`.`id`, `dateHour`, `rdv`.`idPatients` AS `idP`, `p`.`lastname`, `p`.`firstname`, `p`.`mail` AS `email`, `p`.`phone`
+            FROM `appointments` AS `rdv`
+            JOIN `patients` AS `p`
+            ON `rdv`.`idPatients` = `p`.`id`
+            ORDER BY `dateHour`, `p`.`lastname`;';
+        }else{
+            $sql = 'SELECT `rdv`.`id`, `dateHour`, `rdv`.`idPatients` AS `idP`, `p`.`lastname`, `p`.`firstname`, `p`.`mail` AS `email`, `p`.`phone`
+                    FROM `appointments` AS `rdv`
+                    JOIN `patients` AS `p`
+                    ON `idPatients` = `p`.`id`
+                    WHERE `idPatients` = '.$id.';';
+        } 
+        $sth = $db->query($sql);
+        $result = $sth->fetchAll();
+        return $result;
+    }
+
+
+    public static function get($idAppt):object|bool{
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = 'SELECT `id`, `dateHour`, `idPatients`
+                FROM `appointments`
+                WHERE `id` = :id;';
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':id', $idAppt, PDO::PARAM_INT);
+        $sth->execute();
+        $result = $sth->fetch();
+        return $result;
+    }
 }

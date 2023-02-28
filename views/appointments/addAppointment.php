@@ -6,16 +6,17 @@
             <fieldset class="loginFieldset"><h2>Ajout d'un rendez-vous</h2></fieldset>
             <!-- Patient -->
             <label for="patient" class="mt-2">Patient <span class="registrationRequired">*</span></label>
-            <select name="patient" id="patient">
+            <select name="idPatients" id="patient" required>
                 <?php
                 foreach ($patients as $patient) {?>
-                    <option value="<?=$patient->id?>"><?=$patient->firstname . ' ' . $patient->lastname?></option>
-                <?php }?>
+                    <option value="<?=$patient->id?>"><?=$patient->lastname . '--' . $patient->firstname . '--' . $patient->email?></option>
+                    <?php }?>
+                    <option value="0" selected>--Choisir un patient--</option>
             </select>
             <small <?= ($error['patient'] ?? false) ? 'class="text-danger"' : '' ?>><?= $error['patient'] ?? '' ?></small>
             <!-- Rendez-vous -->
             <label for="appointment" class="mt-2">Rendez-vous <span class="registrationRequired">*</span></label>
-            <input type="datetime-local" name="appointment" id="appointment" class="inputForm" required value="<?=$appointment??''?>" min="<?=date('Y-m-d\\TH:i:sP')?>" step="900">
+            <input type="datetime-local" name="appointment" id="appointment" class="inputForm" required value="<?=date('Y-m-d\TH:i')?>" min="<?=date('Y-m-d\TH:i')?>" step="900">
             <small <?= ($error['appointment'] ?? false) ? 'class="text-danger"' : '' ?>><?= $error['appointment'] ?? '' ?></small>
 
             <!-- Required fields informations -->

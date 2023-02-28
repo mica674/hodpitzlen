@@ -40,21 +40,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/PatientsList">Liste des patients</a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="/controllers/twentyClientsCtrl.php">20 clients</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/AddAppointment">Prendre un rendez-vous</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/controllers/loyaltyCardsCtrl.php">Loyalty Cards</a>
+                            <a class="nav-link" href="/AppointmentsList">Liste des rendez-vous</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/controllers/mClientsCtrl.php">M clients</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/controllers/showsCtrl.php">Show date</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/controllers/clientsDetailsCtrl.php">All clients whith details</a>
-                        </li> -->
                     </ul>
                 </div>
             </div>

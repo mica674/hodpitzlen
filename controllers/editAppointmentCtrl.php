@@ -40,23 +40,26 @@ try {
             $error['dateHour'] = 'Date de rendez-vous antérieure à aujourd\'hui !';
         }
 
-        if (Appointment::isExist($dateHour)) {
-            $error['appointment'] = 'Déjà un rendez-vous';
+            // ?Compare with previous values and new values
+        $appointment = Appointment::get(intval(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)));
+        if ($appointment->dateHour != $dateHour && Appointment::isExist($dateHour)) {
+            $error['appointment'] = 'Déjà un rendez-vous sur cette horaire';
         } 
 var_dump($error);
         // ?No error -> redirect to home page
         if (empty($error)) { // Si aucune erreur après tous les nettoyages et les validations
 
             $appointment = new Appointment;
+            $appointment->setId(intval(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)));
             $appointment->setIdPatients($idPatients);
             $appointment->setdateHour($dateHour);
             // Vérification que le patient existe pas déja 
             // Ajouter du patient à la base de donnée & affecter le résultat de l'exécution de la requête à $result
-            $result = $appointment->add();
+            $result = $appointment->update();
             if (!$result) { //Si une erreur est survenu pendant l'ajout à la base de données
                 echo 'message d\'erreur ! (A MODIFIER !)';
             } else { //Si pas d'erreur retour à la page d'Accueil
-                header('location: /Accueil?appointment=1');
+                header('location: /Accueil?appointmentUpdated=1');
                 die;
             }
         } else {
@@ -75,6 +78,11 @@ var_dump($error);
 // Appel du model
 require_once(__DIR__ . '/../models/Appointment.php');
 // Récupère l'ID du patient passé en get
+$idAppointment = intval(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
+$appointment = Appointment::get($idAppointment);
+$idPatientAppointment = $appointment->idPatients;
+$dateAppointment = $appointment->dateHour;
+
 $patients = Patient::getPatientsList();
 
 
@@ -82,7 +90,7 @@ $patients = Patient::getPatientsList();
 include(__DIR__ . '/../views/templates/header.php');
 
 // Appel de la view
-include(__DIR__ . '/../views/appointments/addAppointment.php');
+include(__DIR__ . '/../views/appointments/editAppointment.php');
 
 // Appel du footer
 include(__DIR__ . '/../views/templates/footer.php');

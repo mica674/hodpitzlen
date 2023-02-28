@@ -19,7 +19,7 @@
                 <td><a href="mailto:<?=$patient->email?>"><?=$patient->email?></a></td>
                 <td><a href="tel:<?=$patient->phone?>"><?=$patient->phone?></a></td>
                 <td><?=datefmt_format(DATE_FORMAT, strtotime($patient->birthdate))?></td>
-                <td><a href="/EditPatient?id=<?=$patient->id?>&lastname=<?=$patient->lastname?>&firstname=<?=$patient->firstname?>&email=<?=$patient->email?>&birthdate=<?=$patient->birthdate?>">Modifier</a></td>
+                <td><a href="/EditPatient?id=<?=$patient->id?>">Modifier</a></td>
         </tr>
         
         <?php

@@ -98,6 +98,7 @@ try {
         // Vérification que le patient existe pas déja avec la méthode notAlreadyExist()
         // Ajouter du patient à la base de donnée & affecter le résultat de l'exécution de la requête à $result
         $result = $patient->add();
+        dd($result);
         if (!$result) { //Si une erreur est survenu pendant l'ajout à la base de données
             echo 'message d\'erreur ! (A MODIFIER !)';
         } else { //Si pas d'erreur retour à la page d'Accueil
