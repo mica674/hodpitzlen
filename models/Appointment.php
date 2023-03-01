@@ -139,7 +139,57 @@ class Appointment extends Patient
         // Retourner l'état de l'opération (true si tout s'est bien passé, sinon false)
         return !empty($nbResults);
     }
+
+    // DELETE
+        /**
+     * Cette fonction permet de supprimer un rendez-vous dans la base données.
+     * Elle attend un paramètre d'entrée id du rdv à supprimer (format int)
+     * 
+     * 
+     * @return bool
+     */
+    public static function delete($idAppointment): bool
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = 'DELETE
+                FROM `appointments`
+                WHERE `id` = :id;
+                ;';
+
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':id', $idAppointment, PDO::PARAM_INT);
+        $sth->execute();
+        $result = $sth->rowCount();
+        return !empty($result);
+    }
     
+    // DELETE ALL
+        /**
+     * Cette fonction permet de supprimer tous les rendez-vous d'un patient dans la base données.
+     * Elle attend un paramètre d'entrée, l'id du patient pour supprimer ses rendez-vous (format int)
+     * 
+     * 
+     * @return bool
+     */
+    public static function deleteAll($idPatient): bool
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = 'DELETE
+                FROM `appointments`
+                WHERE `idPatients` = :idPatient;
+                ;';
+
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':idPatient', $idPatient, PDO::PARAM_INT);
+        $sth->execute();
+        $result = $sth->rowCount();
+        return !empty($result);
+    }
+
     // IS NOT EXIST
     public static function isExist($dateHour): bool
     {
@@ -155,6 +205,41 @@ class Appointment extends Patient
         $result = $sth->fetchAll();
         return !empty($result);
     }
+    
+    // IS ID EXIST
+    public static function isIdExist($idAppointment): bool
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = "SELECT `dateHour`, `idPatients`
+                FROM `appointments`
+                WHERE   `id`  =   :idAppointment
+                ;";
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':idAppointment', $idAppointment, PDO::PARAM_INT);
+        $sth->execute();
+        $result = $sth->rowCount();
+        return !empty($result);
+    }
+ 
+    // IS APPOINTMENT EXIST
+    public static function isAptExist($idPatient): bool
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = "SELECT `idPatients`
+                FROM `appointments`
+                WHERE   `idPatients`  =   :idPatient
+                ;";
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':idPatient', $idPatient, PDO::PARAM_INT);
+        $sth->execute();
+        $result = $sth->rowCount();
+        return !empty($result);
+    }
+
 
         // Lister tous les rendez-vous des patients de la base de données
     /**
@@ -198,4 +283,5 @@ class Appointment extends Patient
         $result = $sth->fetch();
         return $result;
     }
+
 }

@@ -16,7 +16,7 @@
             <small <?= ($error['patient'] ?? false) ? 'class="text-danger"' : '' ?>><?= $error['patient'] ?? '' ?></small>
             <!-- Rendez-vous -->
             <label for="appointment" class="mt-2">Rendez-vous <span class="registrationRequired">*</span></label>
-            <input type="datetime-local" name="appointment" id="appointment" class="inputForm" required value="<?=date('Y-m-d\TH:i')?>" min="<?=date('Y-m-d\TH:i')?>" step="900">
+            <input type="datetime-local" name="appointment" id="appointment" class="inputForm" required value="<?=date('Y-m-d\TH:i')?>" min="<?=date('Y-m-d\TH:00')?>" step="900">
             <small <?= ($error['appointment'] ?? false) ? 'class="text-danger"' : '' ?>><?= $error['appointment'] ?? '' ?></small>
 
             <!-- Required fields informations -->

@@ -39,7 +39,11 @@ th{
 }
 
 td{
-    padding: 0.5rem 0 ;
+    padding: 0.5rem 0;
+}
+
+.tdName{
+    justify-content: start;
 }
 
 .trPatient2{

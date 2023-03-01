@@ -6,6 +6,7 @@ let profilPatientInputFirstname = profilPatientInput[1].value;
 let profilPatientInputEmail = profilPatientInput[2].value;
 let profilPatientInputPhone = profilPatientInput[3].value;
 let profilPatientInputBirthdate = profilPatientInput[4].value;
+// cibler l'alert
 
 // Fonctions
 // Comparer les valeurs des inputs avant et après les modifications
@@ -42,3 +43,5 @@ profilPatientInput.forEach(profilPatient => {
         }
     })
 });
+
+

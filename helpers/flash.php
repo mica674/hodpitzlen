@@ -35,12 +35,16 @@ function create_flash_message(string $name, string $message, string $type): void
 function format_flash_message(array $flash_message): string
 {
     return sprintf(
-        '<div class="alert alert-%s alert-dismissible fade show col-md-8 mt-4 mx-auto" role="alert">
-         %s
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>',
-        $flash_message['type'],
-        $flash_message['message']
+        '<div class="alert alert-%2$s alert-dismissible fade-out-down show col-md-6 mt-4 mx-auto" role="alert">
+         %1$s
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>',
+        //%1$s = Premier argument et sous forme de string
+        //%2$s = Premier argument et sous forme de string
+        // d pour entier, f pour flottant
+
+        $flash_message['message'], 
+        $flash_message['type']
     );
 }
 

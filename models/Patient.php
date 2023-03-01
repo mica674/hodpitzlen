@@ -173,7 +173,7 @@ class Patient
         $sth->bindValue(':phone',       $this->phone,       PDO::PARAM_STR);
         $sth->bindValue(':birthdate',   $this->birthdate,   PDO::PARAM_STR);
 
-        
+
         $sth->execute();
 
         // Compter le nombre d'enregistrements affecter par la requête
@@ -208,6 +208,31 @@ class Patient
         return $sth->execute();
     }
 
+    // DELETE
+    /**
+     * Cette fonction permet de supprimer un patient dans la base données.
+     * Elle attend un paramètre d'entrée id du patient à supprimer (format int)
+     * 
+     * 
+     * @return bool
+     */
+    public static function delete($idPatient): bool
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = 'DELETE
+                FROM `patients`
+                WHERE `id` = :id;
+                ;';
+
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':id', $idPatient, PDO::PARAM_INT);
+        $sth->execute();
+        $result = $sth->rowCount();
+        return !empty($result);
+    }
+
     public static function isNotExist($lastname, $firstname, $email, $birthdate): bool
     {
         if (!isset($db)) {
@@ -226,7 +251,7 @@ class Patient
         return empty($result);
     }
 
-    public static function getPatient($id):object
+    public static function getPatient($id): object
     {
         if (!isset($db)) {
             $db = dbConnect();
@@ -240,7 +265,8 @@ class Patient
     }
 
 
-    public static function isIdExist(int $id):bool{
+    public static function isIdExist(int $id): bool
+    {
         if (!isset($db)) {
             $db = dbConnect();
         }
@@ -253,7 +279,6 @@ class Patient
         $sth->execute();
         $result = $sth->fetch();
         return !empty($result);
-
     }
 
     // Lister tous les patients de la base de données

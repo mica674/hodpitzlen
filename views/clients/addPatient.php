@@ -1,5 +1,6 @@
 <!-- MAIN -->
 <main>
+    <?=flash('patientExist')??'';?>
     <!-- Add form -->
     <div class="mt-2">
         <form method="post" class="d-flex flex-column align-items-center" id="registrationForm">

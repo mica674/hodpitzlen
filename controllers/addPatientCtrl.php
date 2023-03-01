@@ -1,13 +1,8 @@
 <?php
 session_start();
 
-$_SESSION['flash_message'] = 'message test';
+require_once(__DIR__ . '/../helpers/flash.php');
 
-if(isset($_SESSION['flash_message'])){
-    $message = $_SESSION['flash_message'];
-    unset($_SESSION['flash_message']);
-    echo $message;
-}
 // Appel des constantes
 require_once(__DIR__ . '/../config/constants.php');
 
@@ -82,8 +77,13 @@ try {
     } elseif (!filter_var($birthdate, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => '/' . REGEXP_BIRTHDATE . '/')))) { //Sinon si $url ne correspond pas à un format url
         $error["birthdate"] = 'La date de naissance n\'est pas valide'; //Message d'erreur birthdate
     }
+
+    if (!Patient::isNotExist($lastname, $firstname, $email, $birthdate)) {//Si le patient existe déjà en base de données
+        flash('patientExist', 'Ce patient existe déjà !', FLASH_DANGER); //Création d'un flash avec le message à afficher 
+        $error['patient'] = 'Ce patient existe déjà !';
+    }
     // ?No error -> redirect to home page
-    if (empty($error) && Patient::isNotExist($lastname, $firstname, $email, $birthdate)) { // Si aucune erreur après tous les nettoyages et les validations
+    if (empty($error)) { // Si aucune erreur après tous les nettoyages et les validations
         
         $patient = new Patient();
         $patient->setLastname($lastname);
@@ -98,15 +98,13 @@ try {
         // Vérification que le patient existe pas déja avec la méthode notAlreadyExist()
         // Ajouter du patient à la base de donnée & affecter le résultat de l'exécution de la requête à $result
         $result = $patient->add();
-        dd($result);
         if (!$result) { //Si une erreur est survenu pendant l'ajout à la base de données
             echo 'message d\'erreur ! (A MODIFIER !)';
         } else { //Si pas d'erreur retour à la page d'Accueil
-            header('location: /Accueil?patientAdded=1');
+            flash('patientAdded', 'Patient ajouté avec succès', FLASH_SUCCESS);
+            header('location: /Accueil');
             die;
         }
-    } else {
-        echo 'patient existe déjà ! (A MODIFIER !)';
     }
     
     // End if ($_SERVER['REQUEST_METHOD'] == 'POST')
