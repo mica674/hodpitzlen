@@ -63,6 +63,13 @@ td>a:hover{
     color: #fbbc04!important;
 }
 
+/* Search Patients List */
+.form-control{
+    height:3rem;
+    width: 30vw;
+}
+
+
 /* Patient profil */
 li{
     list-style-type: none;

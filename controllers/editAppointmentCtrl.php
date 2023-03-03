@@ -68,22 +68,24 @@ var_dump($error);
 
         // End if ($_SERVER['REQUEST_METHOD'] == 'POST')
     }
+
+    // Récupère l'ID du patient passé en get
+    $idAppointment = intval(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
+    $appointment = Appointment::get($idAppointment);
+    var_dump($appointment);die;
+    (!$appointment) ? (throw new Exception('Le rendez-vous n\'existe pas', 1)) : '' ;
+    $idPatientAppointment = $appointment->idPatients;
+    $dateAppointment = $appointment->dateHour;
+    
+    $patients = Patient::getPatientsList();
 } catch (\Throwable $th) {
+    $th->getMessage();
     include(__DIR__ . '/../views/templates/header.php');
     include(__DIR__ . '/../views/templates/errors.php');
     include(__DIR__ . '/../views/templates/footer.php');
     die;
 }
 
-// Appel du model
-require_once(__DIR__ . '/../models/Appointment.php');
-// Récupère l'ID du patient passé en get
-$idAppointment = intval(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
-$appointment = Appointment::get($idAppointment);
-$idPatientAppointment = $appointment->idPatients;
-$dateAppointment = $appointment->dateHour;
-
-$patients = Patient::getPatientsList();
 
 
 // Appel du header

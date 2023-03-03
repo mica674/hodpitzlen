@@ -244,9 +244,9 @@ class Appointment extends Patient
         // Lister tous les rendez-vous des patients de la base de données
     /**
      * Cette fonction permet de retourner la liste de tous les rendez-vous des patients avec leurs informations.
-     * @return array
+     * @return array|false
      */
-    public static function getAll($id = false): array
+    public static function getAll($id = false): array|false
     {
         if (!isset($db)) {
             $db = dbConnect();
@@ -270,7 +270,7 @@ class Appointment extends Patient
     }
 
 
-    public static function get($idAppt):object|bool{
+    public static function get($idAppt):object|false{
         if (!isset($db)) {
             $db = dbConnect();
         }
