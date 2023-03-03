@@ -29,6 +29,7 @@ if ($_GET['appointmentUpdated']??'' == 1) {
     echo 'Le rendez-vous a été modifié avec succès félicitations, excellente journée à vous !';
 }
 
+
 // Appel du header
 require_once(__DIR__ . '/../views/templates/header.php');
 

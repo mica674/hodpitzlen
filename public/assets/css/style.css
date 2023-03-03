@@ -23,6 +23,25 @@ a{
     border: beige 1px solid;
 }
 
+/* NAVBAR */
+.fa-solid.fa-square-h{
+    font-size: 2rem;
+    color: #fbbc04;
+}
+#dropdownPatient{
+    background-color: #555555;
+}
+
+.dropdown-item:hover{
+    background-color: #555555;
+    color: #fbbc04!important;
+}
+
+.nav-item{
+    margin: 0 2rem;
+}
+
+
 /* Patients List */
 .tablePatientList{
     width: 96vw;
@@ -65,8 +84,8 @@ td>a:hover{
 
 /* Search Patients List */
 .form-control{
-    height:3rem;
-    width: 30vw;
+    height:2.5rem;
+    width: 25vw;
 }
 
 

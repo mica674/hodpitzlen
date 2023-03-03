@@ -50,7 +50,6 @@
                         <hr class="w-50 mx-auto">
                         <h4 class="card-title">Accès aux détails des rendez-vous</h4>
                         <p class="card-text">
-
                         </p>
                     </div>
                 </div>

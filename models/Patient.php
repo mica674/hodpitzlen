@@ -264,6 +264,24 @@ class Patient
         return $result;
     }
 
+    public static function getPatientSearch($input)
+    {
+        if (!isset($db)) {
+            $db = dbConnect();
+        }
+        $sql = "SELECT * FROM patients 
+        WHERE lastname      LIKE '%{$input}%'
+            OR firstname    LIKE '%{$input}%'
+            OR mail         LIKE '%{$input}%'
+            OR phone        LIKE '%{$input}%'
+            OR birthdate    LIKE '%{$input}%'
+        ORDER BY lastname
+        LIMIT 10
+        ";
+        $sth = $db->query($sql);
+        $result = $sth->fetchAll();
+        return $result;
+    }
 
     public static function isIdExist(int $id): bool
     {
