@@ -6,10 +6,13 @@ if (isset($_POST['input'], $_POST['nbItems'], $_POST['numPage'])) {
         $limit = intval(filter_input(INPUT_POST, 'nbItems', FILTER_SANITIZE_NUMBER_INT));
         $offset = (intval(filter_input(INPUT_POST, 'numPage', FILTER_SANITIZE_NUMBER_INT))-1)*$limit;
     $patientsSearch = Patient::getPatientSearch($input, $limit, $offset);
+    $patientsPagination = Patient::getPatientSearch($input, 0);
 
     if (count($patientsSearch) > 0) {
-        $patientsSearchJson =  json_encode($patientsSearch);
-        echo $patientsSearchJson;
+        $results = [$patientsSearch, $patientsPagination]; 
+        
+        $resultsJson = json_encode($results);
+        echo $resultsJson;
     } else {
         false;
     }

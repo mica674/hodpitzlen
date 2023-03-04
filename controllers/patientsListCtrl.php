@@ -8,7 +8,7 @@ require_once(__DIR__ . '/../connect.php');
 
 // Appel du model
 require_once(__DIR__ . '/../models/Patient.php');
-$patients = Patient::getPatientsList();
+$patients = Patient::getPatientSearch();
 // Message si un patient vient d'être ajouté
 if (intval(filter_input(INPUT_GET, 'patientEdited', FILTER_SANITIZE_NUMBER_INT)) == 1) {
     echo 'Le patient a été modifié avec succès félicitations, excellente journée à vous !';

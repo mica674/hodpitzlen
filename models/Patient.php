@@ -264,20 +264,43 @@ class Patient
         return $result;
     }
 
-    public static function getPatientSearch($input, $limit = 10, $offset = 0)
+    // Lister tous les patients de la base de données
+    /**
+     * Cette fonction permet de retourner la liste de tous les patients avec toutes leurs informations.
+     * @return array
+     */
+
+    public static function getPatientSearch($input = null, $limit = 10, $offset = 0)
     {
         if (!isset($db)) {
             $db = dbConnect();
         }
-        $sql = "SELECT * FROM `patients` 
-        WHERE `lastname`      LIKE '%{$input}%'
-            OR `firstname`    LIKE '%{$input}%'
-            OR `mail`         LIKE '%{$input}%'
-            OR `phone`        LIKE '%{$input}%'
-            OR `birthdate`    LIKE '%{$input}%'
-        ORDER BY `lastname`, `firstname`
-        LIMIT $limit OFFSET $offset
-        ";
+        if ($limit == 0) { //Comptage du nombre total de résultat
+            $sql = "SELECT count(id) AS maxipage 
+                    FROM patients
+                    WHERE `lastname`      LIKE '%{$input}%'
+                    OR `firstname`    LIKE '%{$input}%'
+                    OR `mail`         LIKE '%{$input}%'
+                    OR `phone`        LIKE '%{$input}%'
+                    OR `birthdate`    LIKE '%{$input}%'
+                    ORDER BY `lastname`, `firstname`";
+        } elseif ($input === null) { // Au premier chargement de la page
+            $sql = 'SELECT `id`, `lastname`, `firstname`, `mail` AS `email`, `phone`, `birthdate` 
+            FROM patients
+            ORDER BY lastname, firstname
+            LIMIT 5;
+            ;';
+        } else{ //Requete pour l'ajax avec limit et offset
+            $sql = "SELECT * FROM `patients` 
+                    WHERE `lastname`      LIKE '%{$input}%'
+                    OR `firstname`    LIKE '%{$input}%'
+                    OR `mail`         LIKE '%{$input}%'
+                    OR `phone`        LIKE '%{$input}%'
+                    OR `birthdate`    LIKE '%{$input}%'
+                    ORDER BY `lastname`, `firstname`
+                    LIMIT $limit OFFSET $offset
+                    ";
+        }
         $sth = $db->prepare($sql);
         $sth->execute();
         $result = $sth->fetchAll();
@@ -300,23 +323,6 @@ class Patient
         return !empty($result);
     }
 
-    // Lister tous les patients de la base de données
-    /**
-     * Cette fonction permet de retourner la liste de tous les patients avec toutes leurs informations.
-     * @return array
-     */
-    public static function getPatientsList(): array
-    {
-        if (!isset($db)) {
-            $db = dbConnect();
-        }
-        $sql = 'SELECT `id`, `lastname`, `firstname`, `mail` AS `email`, `phone`, `birthdate` 
-                FROM patients
-                ORDER BY lastname;';
-        $sth = $db->query($sql);
-        $result = $sth->fetchAll();
-        return $result;
-    }
 }
 
 

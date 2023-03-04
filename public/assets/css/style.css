@@ -82,6 +82,18 @@ td>a:hover{
     color: #fbbc04!important;
 }
 
+#numeroPageMax, #numeroPage{
+    color: white;
+    background-color: transparent;
+    border: none;
+    width:4rem;
+}
+
+#numeroPage{
+    width:1rem;
+    
+}
+
 /* Search Patients List */
 .form-control{
     height:2.5rem;
