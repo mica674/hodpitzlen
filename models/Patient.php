@@ -264,21 +264,22 @@ class Patient
         return $result;
     }
 
-    public static function getPatientSearch($input)
+    public static function getPatientSearch($input, $limit = 10, $offset = 0)
     {
         if (!isset($db)) {
             $db = dbConnect();
         }
-        $sql = "SELECT * FROM patients 
-        WHERE lastname      LIKE '%{$input}%'
-            OR firstname    LIKE '%{$input}%'
-            OR mail         LIKE '%{$input}%'
-            OR phone        LIKE '%{$input}%'
-            OR birthdate    LIKE '%{$input}%'
-        ORDER BY lastname
-        LIMIT 10
+        $sql = "SELECT * FROM `patients` 
+        WHERE `lastname`      LIKE '%{$input}%'
+            OR `firstname`    LIKE '%{$input}%'
+            OR `mail`         LIKE '%{$input}%'
+            OR `phone`        LIKE '%{$input}%'
+            OR `birthdate`    LIKE '%{$input}%'
+        ORDER BY `lastname`, `firstname`
+        LIMIT $limit OFFSET $offset
         ";
-        $sth = $db->query($sql);
+        $sth = $db->prepare($sql);
+        $sth->execute();
         $result = $sth->fetchAll();
         return $result;
     }

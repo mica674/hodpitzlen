@@ -1,8 +1,15 @@
 <div class="container-fluid">
     <!-- Champ de recherche -->
     <div class="container d-flex align-items-center justify-content-end me-3">
+        <select name="itemsPerPage" id="itemsPerPage" class="liveSearch">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
         <div class="bg-transparent my-3" id="searchNoResult"></div>
-        <input type="text" class="form-control" id="live_search" autocomplete="off" placeholder="Recherche ...">
+        <input type="text" class="form-control liveSearch" id="live_search" autocomplete="off" placeholder="Recherche ...">
     </div>
     <!-- Tableaux de tous les patients -->
     <table class="tablePatientList mt-1">
@@ -39,11 +46,12 @@
         <tbody id="searchResult">
         </tbody>
     </table>
+    <label for="numeroPage">page</label>
+    <input type="number" id="numeroPage" class="liveSearch" name="numeroPage" value="1">
 
 
     <div class="bg-transparent d-flex my-3">
         <a href="/controllers/addPatientCtrl.php" class="mx-auto text-white addBtn">Ajouter un patient</a>
     </div>
 
-    <div class="resultTest" id="resultTest"></div>
 </div>
